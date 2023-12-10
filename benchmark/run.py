@@ -3,6 +3,8 @@ import time
 import sys
 import os
 
+from args_parser import get_arguments
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
@@ -31,13 +33,15 @@ def run_minizinc_with_timeout(main_file, input_file, timeout):
     return process_output
 
 
-def benchmark(N):
+def benchmark(N, timeout):
     for i in range(1, 11):
         file_name = f'N_{N}_{i}'
         writeToFiles(N, file_name)
-        run_minizinc_with_timeout('main-dpath.mzn', f'generate_data/data/dpath/{file_name}.dzn', N)
-        run_minizinc_with_timeout('main-adjacent-matrix.mzn', f'generate_data/data/adjacent-matrix/{file_name}.dzn', N)
+        run_minizinc_with_timeout('main-dpath.mzn', f'generate_data/data/dpath/{file_name}.dzn', timeout)
+        run_minizinc_with_timeout('main-adjacent-matrix.mzn', f'generate_data/data/adjacent-matrix/{file_name}.dzn', timeout)
         print(f'Finished N = {N} : {i}/10')
 
 
-benchmark(25)
+if __name__ == '__main__':
+    N, timeout = get_arguments()
+    benchmark(N, timeout)
