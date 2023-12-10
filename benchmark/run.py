@@ -3,12 +3,11 @@ import time
 import sys
 import os
 
-from args_parser import get_arguments
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
+from args_parser import get_arguments
 from generate_data.run import writeToFiles
 
 
@@ -34,6 +33,8 @@ def run_minizinc_with_timeout(main_file, input_file, timeout):
 
 
 def benchmark(N, timeout):
+    os.makedirs("benchmark/logs/adjacent-matrix", exist_ok=True)
+    os.makedirs("benchmark/logs/dpath", exist_ok=True)
     for i in range(1, 11):
         file_name = f'N_{N}_{i}'
         writeToFiles(N, file_name)

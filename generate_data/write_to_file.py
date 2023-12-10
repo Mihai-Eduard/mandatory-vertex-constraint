@@ -1,3 +1,6 @@
+import os
+
+
 def writeToFileForMinizinc(N, M, Q, start, end, edges, mandatory, file_name):
     output_file = "generate_data/data/dpath/{}".format(file_name)
     with open(output_file, "w") as file:

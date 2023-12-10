@@ -1,4 +1,11 @@
 import random
+import sys
+import os
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
 from generate_data.args_parser import get_arguments
 from generate_data.write_to_file import writeToFileForMinizinc, writeToFileForGraphsVisualizer, writeToFileAdjacentMatrix
 
@@ -32,6 +39,9 @@ def generateRandom(N):
 
 
 def writeToFiles(N, file_name):
+    os.makedirs("generate_data/data/dpath", exist_ok=True)
+    os.makedirs("generate_data/data/graph-visualization", exist_ok=True)
+    os.makedirs("generate_data/data/adjacent-matrix", exist_ok=True)
     N, M, Q, start, end, edges, mandatory = generateRandom(N)
     writeToFileForMinizinc(N, M, Q, start, end, edges, mandatory, f'{file_name}.dzn')
     writeToFileForGraphsVisualizer(N, M, edges, f'{file_name}.txt')
