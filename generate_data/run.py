@@ -1,6 +1,6 @@
 import random
-from args_parser import get_arguments
-from write_to_file import writeToFileForMinizinc, writeToFileForGraphsVisualizer
+from generate_data.args_parser import get_arguments
+from generate_data.write_to_file import writeToFileForMinizinc, writeToFileForGraphsVisualizer, writeToFileAdjacentMatrix
 
 
 def generateRandom(N):
@@ -20,13 +20,24 @@ def generateRandom(N):
 
     mandatory = []
     for i in range(Q):
-        mandatory.append({random.randint(1, N)})
+        current_set = set()
+        for j in range(1, N + 1):
+            if random.random() > 0.75:
+                current_set.add(j)
+        if len(current_set) == 0:
+            current_set.add(start)
+        mandatory.append(current_set)
 
     return N, M, Q, start, end, edges, mandatory
 
 
-if __name__ == '__main__':
-    N, file_name = get_arguments()
+def writeToFiles(N, file_name):
     N, M, Q, start, end, edges, mandatory = generateRandom(N)
     writeToFileForMinizinc(N, M, Q, start, end, edges, mandatory, f'{file_name}.dzn')
     writeToFileForGraphsVisualizer(N, M, edges, f'{file_name}.txt')
+    writeToFileAdjacentMatrix(N, M, Q, start, end, edges, mandatory, f'{file_name}.dzn')
+
+
+if __name__ == '__main__':
+    N, file_name = get_arguments()
+    writeToFiles(N, file_name)

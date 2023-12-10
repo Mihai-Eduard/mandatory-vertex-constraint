@@ -1,3 +1,5 @@
+include "alldifferent.mzn";
+
 int: N; %number of nodes
 int: M; %number of directed edges
 int: Q; %number of constraints 
@@ -7,14 +9,17 @@ int: end; %ending point of path
 array[1..N,1..N] of int: mat; %adjacent matrix
 array[1..Q] of set of int: mandatory; %list of mandatory sets
 
-var 1..M+1: L; %the lenght of the path
-array[1..M+1] of var 0..N: path; %the target path
+var 1..N: L; %the lenght of the path
+array[1..N] of var 0..N: path; %the target path
 
 %first and last element constraint
 constraint path[1]==start /\ path[L]==end;
 
 %valid vertexes for the path
 constraint forall(i in 1..N)(if i<=L then path[i]>=1 else path[i]==0 endif);
+
+%the path is simple
+constraint alldifferent(i in 1..L)(path[i]);
 
 %edge between every consecutive pair of elements
 constraint forall(i in 1..L-1)(mat[path[i],path[i+1]]!=-1);
